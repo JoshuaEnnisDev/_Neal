@@ -11,6 +11,8 @@ HEIGHT = 600
 MIDDLE = WIDTH / 2
 BOTTOM = HEIGHT - 50
 
+ommlete = Actor('ommlete')
+
 #player
 player = Actor('bag')
 player.midbottom = (MIDDLE, 515)
@@ -40,8 +42,7 @@ def draw():
   ground.draw()
   player.draw()
   egg.draw()
-  
-  
+  ommlete.draw()
   
 #this runs 60 times per second
 def update():
@@ -52,7 +53,8 @@ def update():
   
   #check if egg hits the ground
   if egg.bottom >= 500:
-
+    
+    ommlete.pos = egg.pos
     egg.bottom = 0
     egg.x = randint(50, WIDTH - 50)
   
