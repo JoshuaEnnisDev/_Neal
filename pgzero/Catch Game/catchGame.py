@@ -1,14 +1,9 @@
 from pgzrun import go
 from random import randint
 
-
-
-
 #bad obstacles
 #add sounds
-#add fonts
 #game over screen
-
 
 #screen
 WIDTH = 800
