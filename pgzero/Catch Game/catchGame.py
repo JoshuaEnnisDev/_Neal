@@ -52,13 +52,12 @@ def update():
   
   #check if egg hits the ground
   if egg.bottom >= 500:
-    print(egg_speed)
+
     egg.bottom = 0
     egg.x = randint(50, WIDTH - 50)
   
   #check collision with the bag
   if egg.colliderect(player):
-    
     #comparing y values
     if egg.bottom >= player.y - 10:
       score += 1
@@ -77,8 +76,6 @@ def update():
     player.left = 0
   if player.right > WIDTH:
     player.right = WIDTH
-    
-  
   
   
 
