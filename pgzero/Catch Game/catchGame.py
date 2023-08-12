@@ -11,15 +11,13 @@ HEIGHT = 600
 MIDDLE = WIDTH / 2
 BOTTOM = HEIGHT - 50
 
-ommlete = Actor('ommlete')
-
 # player
 player = Actor('bag')
 player.midbottom = (MIDDLE, 515)
 
 # ground
 ground = Actor('ground')
-ground.topleft = (0, 500) 
+ground.topleft = (0, 500)
 
 # sky
 sky = Actor('sky')
@@ -39,17 +37,16 @@ score = 0
 def draw():
     screen.fill('#D0F4F7')
     screen.draw.text(
-                f"SCORE: {score}",
-                (10, 10),
-                color='black',
-                fontsize=30,
-                fontname='vmsb'
+        f"SCORE: {score}",
+        (10, 10),
+        color='black',
+        fontsize=30,
+        fontname='vmsb'
     )
     sky.draw()
     ground.draw()
     player.draw()
     egg.draw()
-    ommlete.draw()
 
 
 # this runs 60 times per second
@@ -61,7 +58,6 @@ def update():
 
     # check if egg hits the ground
     if egg.bottom >= 500:
-        ommlete.pos = egg.pos
         egg.bottom = 0
         egg.x = randint(50, WIDTH - 50)
 
