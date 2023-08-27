@@ -7,12 +7,13 @@ MIDDLE = WIDTH / 2
 BOTTOM = HEIGHT - 100
 
 rots = []
-for i in range(5):
+for _ in range(10):
     r = Actor("monster")
     r.drop = False
-    rots.append(r)
+    r.speed = randint(3, 7)
     r.x = randint(0, 800)
     r.bottom = 0
+    rots.append(r)
 
 hearts = []
 for i in range(1):
@@ -30,7 +31,6 @@ sky.bottomleft = (0, HEIGHT - 100)
 
 player = Actor("bag")
 player.midbottom = (MIDDLE, 500)
-player.lives = 1
 player.speed = 3
 player.score = 0
 player.boost = 0
@@ -50,7 +50,6 @@ gold_egg.drop = False
 
 # global variables
 has_played = False
-drop_eggs = False
 
 
 def handle_gold_egg():
@@ -83,23 +82,44 @@ def handle_egg():
 
 def handle_rotten_egg():
     rotten_egg.y += egg.speed
-    if isTouchPlayer(rotten_egg) and len(hearts) > 0:
-        hearts.remove(hearts[0])
+    if isTouchPlayer(rotten_egg):
+        lose_life()
     if isTouchingGround(rotten_egg):
         moveToTop(rotten_egg)
+
+
+def lose_life():
+    if len(hearts) > 0:
+        hearts.remove(hearts[0])
+
+
+def drop_eggs():
+    for r in rots:
+        r.drop = True
 
 
 def handle_rotten_eggs():
     for r in rots:
         if r.drop:
-            r.y += 3
-        if player.last_multiple != player.score:
-            if player.score % 2 == 0:
-                player.last_multiple = player.score
-                r.drop = True
-            if isTouchingGround(r):
-                moveToTop(r)
-                r.drop = False
+            r.y += r.speed
+
+        if isTouchingGround(r):
+            moveToTop(r)
+            r.drop = False
+
+        if isTouchPlayer(r):
+            lose_life()
+            r.drop = False
+
+    if player.last_multiple != player.score:
+        if player.score % 2 == 0:
+            player.last_multiple = player.score
+            drop_eggs()
+
+
+def draw_list(list):
+    for item in list:
+        item.draw()
 
 
 def moveToTop(obs):
@@ -128,7 +148,29 @@ def game_over():
         return False
 
 
-# draw stuff
+def move_player():
+    player.speed = 2 + player.score / 6 + player.boost
+    if keyboard.Left:
+        player.x -= player.speed
+    elif keyboard.Right:
+        player.x += player.speed
+
+
+def bound_player():
+    if player.left < 0:
+        player.left = 0
+    if player.right > WIDTH:
+        player.right = WIDTH
+
+
+def play_lose_sound(has_played):
+    if has_played:
+        return
+    elif game_over() and not has_played:
+        sounds.lose1.play()
+        has_played = True
+
+
 def draw():
     if game_over():
         screen.fill("black")
@@ -156,39 +198,21 @@ def draw():
             fontname="vmsb",
         )
 
-        for heart in hearts:
-            heart.draw()
-
-        for r in rots:
-            r.draw()
+        draw_list(hearts)
+        draw_list(rots)
 
 
-# THIS RUNS 60 TIMES PER SECOND
 def update():
-    global has_played
-    global drop_eggs
+    play_lose_sound()
+    game_over()
 
-    if game_over() and not has_played:
-        sounds.lose1.play()
-        has_played = True
-
+    move_player()
+    bound_player()
     handle_gold_egg()
     handle_rotten_egg()
     handle_rotten_eggs()
     handle_egg()
-
-    player.speed = 2 + player.score / 6 + player.boost
-
-    # movement
-    if keyboard.Left:
-        player.x -= player.speed
-    elif keyboard.Right:
-        player.x += player.speed
-    # bound to screen
-    if player.left < 0:
-        player.left = 0
-    if player.right > WIDTH:
-        player.right = WIDTH
+    play_lose_sound()
 
 
-go()  # has to be the last line
+go()
