@@ -203,7 +203,7 @@ def draw():
 
 
 def update():
-    play_lose_sound()
+    # play_lose_sound()
     game_over()
 
     move_player()
@@ -212,7 +212,7 @@ def update():
     handle_rotten_egg()
     handle_rotten_eggs()
     handle_egg()
-    play_lose_sound()
+   # play_lose_sound()
 
 
 go()
