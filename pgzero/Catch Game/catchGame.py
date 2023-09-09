@@ -112,7 +112,7 @@ def handle_rotten_eggs():
             r.drop = False
 
     if player.last_multiple != player.score:
-        if player.score % 2 == 0:
+        if player.score % 5 == 0:
             player.last_multiple = player.score
             drop_eggs()
 
@@ -205,14 +205,13 @@ def draw():
 def update():
     # play_lose_sound()
     game_over()
-
     move_player()
     bound_player()
     handle_gold_egg()
     handle_rotten_egg()
     handle_rotten_eggs()
     handle_egg()
-   # play_lose_sound()
+    # play_lose_sound()
 
 
 go()
